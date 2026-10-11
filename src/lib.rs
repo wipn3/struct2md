@@ -58,7 +58,15 @@ macro_rules! impl_to_markdown_display {
     };
 }
 
-impl_to_markdown_display!(i8, i16, i32, i64, isize, u8, u16, u32, u64, usize, f32, f64);
+impl_to_markdown_display!(
+    i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize, f32, f64, char
+);
+
+impl<T: ToMarkdown + ?Sized> ToMarkdown for &T {
+    fn to_markdown(&self) -> String {
+        (*self).to_markdown()
+    }
+}
 
 impl<T: ToMarkdown> ToMarkdown for Option<T> {
     fn to_markdown(&self) -> String {
@@ -69,14 +77,28 @@ impl<T: ToMarkdown> ToMarkdown for Option<T> {
     }
 }
 
-impl<T: ToMarkdown> ToMarkdown for Vec<T> {
+impl<T: ToMarkdown> ToMarkdown for [T] {
     fn to_markdown(&self) -> String {
-        self.iter().map(|item| item.to_markdown()).collect()
+        let items: Vec<String> = self.iter().map(|item| item.to_markdown()).collect();
+        if items.is_empty() {
+            return String::new();
+        }
+        if items.iter().all(|item| item.ends_with('\n')) {
+            items.concat()
+        } else {
+            items.join(", ")
+        }
     }
 }
 
-impl<T: ToMarkdown> ToMarkdown for [T] {
+impl<T: ToMarkdown> ToMarkdown for Vec<T> {
     fn to_markdown(&self) -> String {
-        self.iter().map(|item| item.to_markdown()).collect()
+        self.as_slice().to_markdown()
+    }
+}
+
+impl<T: ToMarkdown, const N: usize> ToMarkdown for [T; N] {
+    fn to_markdown(&self) -> String {
+        self.as_slice().to_markdown()
     }
 }

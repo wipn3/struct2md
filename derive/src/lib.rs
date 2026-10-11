@@ -76,8 +76,8 @@ pub fn derive_to_markdown(input: TokenStream) -> TokenStream {
 
     // Ensure macro is applied to named structs only.
     let struct_data = match args.data.take_struct() {
-        Some(data) => data,
-        None => {
+        Some(data) if data.is_struct() => data,
+        _ => {
             return TokenStream::from(
                 syn::Error::new_spanned(
                     &input.ident,
@@ -139,14 +139,15 @@ pub fn derive_to_markdown(input: TokenStream) -> TokenStream {
 
             // Handle list iteration if #[md(list = "...")] is specified.
             if let Some(list_kind) = &field.list {
-                let pref = quote! { #prefix_str };
-                let head = quote! { #heading_prefix };
+                let mut list_header = format!("{}{}", heading_prefix, prefix_str);
+                if !list_header.is_empty() && !list_header.ends_with('\n') {
+                    list_header.push('\n');
+                }
 
                 return match list_kind {
                     ListKind::Unordered => quote! {
                         if !self.#field_name.is_empty() {
-                            out.push_str(#head);
-                            out.push_str(#pref);
+                            out.push_str(#list_header);
                             for item in self.#field_name.iter() {
                                 out.push_str(&format!("- {}\n", item.to_markdown()));
                             }
@@ -154,8 +155,7 @@ pub fn derive_to_markdown(input: TokenStream) -> TokenStream {
                     },
                     ListKind::Ordered => quote! {
                         if !self.#field_name.is_empty() {
-                            out.push_str(#head);
-                            out.push_str(#pref);
+                            out.push_str(#list_header);
                             for (i, item) in self.#field_name.iter().enumerate() {
                                 out.push_str(&format!("{}. {}\n", i + 1, item.to_markdown()));
                             }
@@ -163,8 +163,7 @@ pub fn derive_to_markdown(input: TokenStream) -> TokenStream {
                     },
                     ListKind::Definition => quote! {
                         if !self.#field_name.is_empty() {
-                            out.push_str(#head);
-                            out.push_str(#pref);
+                            out.push_str(#list_header);
                             for item in self.#field_name.iter() {
                                 out.push_str(&format!(": {}\n", item.to_markdown()));
                             }
@@ -195,16 +194,29 @@ pub fn derive_to_markdown(input: TokenStream) -> TokenStream {
 
             let full_fmt = format!("{}{}{}\n", heading_prefix, prefix_str, fmt);
 
+            let val_binding = if field.quote {
+                quote! {
+                    let val = self.#field_name.to_markdown();
+                    let val = val.lines().collect::<Vec<_>>().join("\n> ");
+                }
+            } else {
+                quote! {
+                    let val = self.#field_name.to_markdown();
+                }
+            };
+
             quote! {
-                let val = self.#field_name.to_markdown();
+                #val_binding
                 if !val.is_empty() {
                     out.push_str(&format!(#full_fmt, val))
                 }
             }
         });
 
+    let (impl_generics, ty_generics, where_clause) = input.generics.split_for_impl();
+
     let expanded = quote! {
-        impl ::struct2md::ToMarkdown for #name {
+        impl #impl_generics ::struct2md::ToMarkdown for #name #ty_generics #where_clause {
             fn to_markdown(&self) -> String {
                 let mut out = String::new();
                 #(#field_statements)*
