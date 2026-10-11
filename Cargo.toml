@@ -1,0 +1,15 @@
+[package]
+name = "struct2md"
+version = "0.1.0"
+edition = "2024"
+description = "Declarative macro to serialize Rust structs into Markdown via field attributes"
+license = "MIT OR Apache-2.0"
+
+[workspace]
+members = [
+    ".",
+    "derive",
+]
+
+[dependencies]
+struct2md_derive = { path = "derive", version = "0.1.0" }

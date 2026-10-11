@@ -1,0 +1,15 @@
+[package]
+name = "struct2md_derive"
+version = "0.1.0"
+edition = "2024"
+description = "Proc-macro derive for struct2md"
+license = "MIT OR Apache-2.0"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+darling = "0.24.1"
+proc-macro2 = "1.0.107"
+quote = "1.0.47"
+syn = { version = "3.0.7", features = ["extra-traits", "full"] }
