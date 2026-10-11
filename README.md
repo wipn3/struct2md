@@ -8,7 +8,7 @@ This library provides a derive macro to format Rust structs into Markdown via fi
 
 ```toml
 [dependencies]
-struct2md = "0.1.0"
+struct2md = "0.1.1"
 ```
 
 ## Example
