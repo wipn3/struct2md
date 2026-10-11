@@ -1,4 +1,5 @@
 [package]
+exclude = ["Cargo.lock"]
 name = "struct2md_derive"
 version = "0.1.0"
 edition = "2024"
