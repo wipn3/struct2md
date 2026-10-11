@@ -21,13 +21,13 @@ struct Issue {
     #[md(heading = 1, bold, plain)]
     title: String,
 
-    #[md(prefix = "### Description\n", quote)]
+    #[md(heading = 3, quote)]
     description: String,
 
-    #[md(prefix = "### Steps to Reproduce\n", list = "ordered")]
+    #[md(heading = 3, list = "ordered")]
     steps: Vec<String>,
 
-    #[md(prefix = "### Tags\n", list = "unordered")]
+    #[md(heading = 3, list = "unordered")]
     tags: Vec<String>,
 
     // Fields without #[md] attributes are ignored
@@ -54,14 +54,11 @@ Output:
 
 ```markdown
 # **Crash on startup**
-### Description
-> Application panics when config is missing.
-
-### Steps to Reproduce
+### description: > Application panics when config is missing.
+### steps: 
 1. Clone repository
 2. Run cargo run --bin app
-
-### Tags
+### tags: 
 - bug
 - backend
 ```
