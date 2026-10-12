@@ -2,13 +2,18 @@
 
 [<img alt="crates.io" src="https://img.shields.io/crates/v/struct2md.svg?style=for-the-badge&color=fc8d62&logo=rust" height="20">](https://crates.io/crates/struct2md)
 [<img alt="docs.rs" src="https://img.shields.io/badge/docs.rs-struct2md-66c2a5?style=for-the-badge&labelColor=555555&logo=docs.rs" height="20">](https://docs.rs/struct2md)
-[<img alt="license" src="https://img.shields.io/badge/license-MIT%2FApache--2.0-blue?style=for-the-badge" height="20">](https://github.com/wipn/struct2md)
+[<img alt="license" src="https://img.shields.io/badge/license-MIT%2FApache--2.0-blue?style=for-the-badge" height="20">](https://github.com/wipn3/struct2md)
 
 This library provides a derive macro to format Rust structs into Markdown via field attributes.
 
+<<<<<<< HEAD
 ```toml
 [dependencies]
 struct2md = "0.1.1"
+=======
+```bash
+cargo add struct2md
+>>>>>>> 80011bb (docs: switch to cargo add, fix repo url)
 ```
 
 ## Example
@@ -67,7 +72,7 @@ Output:
 
 | Attribute | Parameter | Description |
 |---|---|---|
-| `#[md]` | — | Includes field in output, delegating formatting to `ToMarkdown` |
+| `#[md]` | - | Includes field in output, delegating formatting to `ToMarkdown` |
 | `#[md(plain)]` | Flag | Omits the default `field_name:` prefix |
 | `#[md(heading = N)]` | `u8` (1..=6) | Prepends heading level (`#`, `##`, `###`, etc.) |
 | `#[md(prefix = "...")]` | `&str` | Overrides the field prefix string |
