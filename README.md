@@ -6,14 +6,8 @@
 
 This library provides a derive macro to format Rust structs into Markdown via field attributes.
 
-<<<<<<< HEAD
-```toml
-[dependencies]
-struct2md = "0.1.1"
-=======
 ```bash
 cargo add struct2md
->>>>>>> 80011bb (docs: switch to cargo add, fix repo url)
 ```
 
 ## Example
