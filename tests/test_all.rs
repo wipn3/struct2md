@@ -102,8 +102,12 @@ fn test_nested_structures() {
     let doc = Doc {
         header: "Section".to_string(),
         items: vec![
-            Item { name: "A".to_string() },
-            Item { name: "B".to_string() },
+            Item {
+                name: "A".to_string(),
+            },
+            Item {
+                name: "B".to_string(),
+            },
         ],
     };
 
@@ -211,7 +215,10 @@ fn test_definition_list() {
         terms: vec!["definition 1".to_string(), "definition 2".to_string()],
     };
 
-    assert_eq!(d.to_markdown(), "## terms: \n: definition 1\n: definition 2\n");
+    assert_eq!(
+        d.to_markdown(),
+        "## terms: \n: definition 1\n: definition 2\n"
+    );
 }
 
 #[test]
@@ -238,7 +245,8 @@ fn test_extended_primitives_and_arrays() {
         borrowed: "borrowed string",
     };
 
-    let expected = "X\n100000000000000000000\n-100000000000000000000\n10, 20, 30\nborrowed string\n";
+    let expected =
+        "X\n100000000000000000000\n-100000000000000000000\n10, 20, 30\nborrowed string\n";
     assert_eq!(m.to_markdown(), expected);
 }
 
