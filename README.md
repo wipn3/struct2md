@@ -53,11 +53,12 @@ Output:
 
 ```markdown
 # **Crash on startup**
-### description: > Application panics when config is missing.
-### steps: 
+### description:
+> Application panics when config is missing.
+### steps:
 1. Clone repository
 2. Run cargo run --bin app
-### tags: 
+### tags:
 - bug
 - backend
 ```

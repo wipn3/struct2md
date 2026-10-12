@@ -140,8 +140,8 @@ pub fn derive_to_markdown(input: TokenStream) -> TokenStream {
             // Handle list iteration if #[md(list = "...")] is specified.
             if let Some(list_kind) = &field.list {
                 let mut list_header = format!("{}{}", heading_prefix, prefix_str);
-                if !list_header.is_empty() && !list_header.ends_with('\n') {
-                    list_header.push('\n');
+                if !list_header.is_empty() {
+                    list_header = format!("{}\n", list_header.trim_end());
                 }
 
                 return match list_kind {
@@ -192,8 +192,12 @@ pub fn derive_to_markdown(input: TokenStream) -> TokenStream {
                 }
             }
 
-            let full_fmt = format!("{}{}{}\n", heading_prefix, prefix_str, fmt);
+            let mut header = format!("{}{}", heading_prefix, prefix_str);
+            if field.quote && !header.is_empty() {
+                header = format!("{}\n", header.trim_end());
+            }
 
+            let full_fmt = format!("{}{}\n", header, fmt);
             let val_binding = if field.quote {
                 quote! {
                     let val = self.#field_name.to_markdown();
